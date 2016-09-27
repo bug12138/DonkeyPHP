@@ -10,12 +10,11 @@ class model extends \PDO
 {
     public function __construct()
     {
-        $dsn = "mysql:host=localhost;dbname=test";
-        $user = 'root';
-        $pwd = '';
+        $database = config::all('database');
 
+        $database['dsn'] = $database['dsn'] . ";charset=" . $database['charSet'];
         try{
-            parent::__construct($dsn, $user,$pwd);
+            parent::__construct($database['dsn'], $database['username'], $database['password']);
         }catch (\Exception $e) {
             echo $e->getMessage();
         }

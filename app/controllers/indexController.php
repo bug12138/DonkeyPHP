@@ -1,5 +1,7 @@
 <?php
 namespace app\controllers;
+use vendor\lib\log;
+
 /**
  * Created by PhpStorm.
  * User: Wang Han
@@ -17,9 +19,16 @@ class indexController extends \vendor\lib\Controller
 
     public function index($params)
     {
+        //$conf = \vendor\lib\config::get('default_controller', 'route');
+        //$conf = \vendor\lib\config::get('default_action', 'route');
+        //$conf = \vendor\lib\config::all('database');
+
+        log::init()->log(['aaa' => 2222, 'xxx' => 333], 'warning');
+
         //$model = new \vendor\lib\model();
         //$query = $model->query("select * from documents");
         //$data = $query->fetchAll(\PDO::FETCH_ASSOC);
+        //var_dump($data);exit;
         $this->assign('data', 'hello hellohellohello');
         $this->assign('title', 'test');
         $this->display('index/index');

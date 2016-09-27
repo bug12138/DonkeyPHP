@@ -37,8 +37,8 @@ class route
                 echo '参数错误!请查验';
             }
         } else {
-            $this->ctrl = 'index';
-            $this->action = 'index';
+            $this->ctrl = config::get('default_controller', 'route');
+            $this->action = config::get('default_action', 'route');
         }
     }
     public function test()
