@@ -11,7 +11,13 @@ define('APP', DONKEY . '/app');
 
 define('DEBUG', true);
 
+include "vendor/autoload.php";
 if(DEBUG) {
+    $whoops = new \Whoops\Run;
+    $option = new \Whoops\Handler\PrettyPageHandler;
+    $option->setPageTitle("DonkeyPHP created by Wang Han");
+    $whoops->pushHandler($option);
+    $whoops->register();
     ini_set('display_errors', '1');
 } else {
     ini_set('display_errors', '0');

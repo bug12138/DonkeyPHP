@@ -1,0 +1,13 @@
+{
+  "name": "Donkey PHP",
+  "description": "Wang han Create Framework",
+  "type": "Framework",
+  "keywords":[
+    "PHP", "php framework"
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "filp/whoops":"*",
+    "symfony/var-dumper":"*"
+  }
+}
