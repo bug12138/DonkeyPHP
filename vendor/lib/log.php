@@ -6,7 +6,7 @@ namespace vendor\lib;
  * Date: 2016/9/27 0027
  * Time: 下午 1:32
  */
-class log
+class Log
 {
     static public $class;
     static public function init()

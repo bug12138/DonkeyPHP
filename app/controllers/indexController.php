@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
-use vendor\lib\log;
+use app\models\Documents;
+//use vendor\lib\{Log, Controller}; // PHP7可以这样写
 
 /**
  * Created by PhpStorm.
@@ -23,12 +24,18 @@ class indexController extends \vendor\lib\Controller
         //$conf = \vendor\lib\config::get('default_action', 'route');
         //$conf = \vendor\lib\config::all('database');
 
-        log::init()->log(['aaa' => 2222, 'xxx' => 333], 'warning');
+        //Log::init()->log(['aaa' => 2222, 'xxx' => 333], 'warning');
 
-        //$model = new \vendor\lib\model();
-        //$query = $model->query("select * from documents");
-        //$data = $query->fetchAll(\PDO::FETCH_ASSOC);
-        //var_dump($data);exit;
+        // 测试Model 范例1
+        $documents = Documents::findOne(['id' => 4]);
+        // 测试Model 范例2
+        $documents = Documents::findAll(['group_id' => 2]);
+
+        foreach($documents as $v) {
+            dump($v->title);
+        }
+
+        exit;
         $this->assign('data', 'hello hellohellohello');
         $this->assign('title', 'test');
         $this->display('index/index');

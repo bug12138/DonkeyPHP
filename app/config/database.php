@@ -6,8 +6,9 @@
  * Time: 上午 10:55
  */
 return [
-    'dsn' => "mysql:host=localhost;dbname=test",
+    'host' => "localhost",
+    'dbname' => 'test',
     'username' => 'root',
     'password' => '',
-    'charSet' => 'utf8'
+    'charset' => 'utf8'
 ];
