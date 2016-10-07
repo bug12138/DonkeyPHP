@@ -26,9 +26,9 @@ if(DEBUG) {
 // 加载系统函数
 include VENDOR . '/common/function.php';
 
-include VENDOR . '/donkey.php';
+include VENDOR . '/Donkey.php';
 
-spl_autoload_register('\vendor\donkey::load');
+spl_autoload_register('\vendor\Donkey::load');
 
 // 启动框架
-\vendor\donkey::run();
+\vendor\Donkey::run();

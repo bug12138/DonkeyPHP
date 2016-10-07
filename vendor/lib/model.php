@@ -65,6 +65,7 @@ class Model implements ModelInterface
     public static function primaryKey()
     {
         // TODO: Implement primaryKey() method.
+        return ['id'];
     }
 
     /**
@@ -106,6 +107,11 @@ class Model implements ModelInterface
         return $model;
     }
 
+    /**
+     * 根据条件查找一条记录
+     * @param null $condition
+     * @return mixed|null
+     */
     public static function findOne($condition = null)
     {
         list($where, $params) = static::buildWhere($condition);
@@ -125,6 +131,11 @@ class Model implements ModelInterface
         return null;
     }
 
+    /**
+     * 根据条件查询符合的素有记录
+     * @param $condition
+     * @return \Generator
+     */
     public static function findAll($condition)
     {
         // TODO: Implement findAll() method.
@@ -154,28 +165,151 @@ class Model implements ModelInterface
         //return $models;
     }
 
-    public static function updateAll($condition, $attributes)
+    /**
+     * 更新符合条件的记录
+     * @param $condition
+     * @param $attributes
+     */
+    public static function updateAll($attributes, $condition)
     {
         // TODO: Implement updateAll() method.
+        $sql = "update " . static::tableName();
+        $params = [];
+
+        if(!empty($attributes)) {
+            $sql .= ' set ';
+            $params = array_values($attributes);
+            $keys = [];
+            foreach($attributes as $key => $value) {
+                array_push($keys, "$key = ?");
+            }
+            $sql .= implode(',', $keys);
+        }
+
+        list($where, $params) = static::buildWhere($condition, $params);
+        $sql .= $where;
+
+        $stmt = static::getDb()->prepare($sql);
+        $execRs = $stmt->execute($params);
+
+        if($execRs) {
+            // 获取更新的行数
+            $execRs = $stmt->rowCount();
+        }
+        return $execRs;
+
     }
 
+    /**
+     * 删除符合条件的所有记录
+     * @param $condition
+     */
     public static function deleteAll($condition)
     {
         // TODO: Implement deleteAll() method.
+        list($where, $params) = static::buildWhere($condition);
+
+        $sql = 'delete from ' . static::tableName() . $where;
+        $stmt = static::getDb()->prepare($sql);
+        $execRs = $stmt->execute($params);
+
+        if($execRs) {
+            $execRs = $stmt->rowCount();
+        }
+        return $execRs;
     }
 
+    /**
+     * 插入操作
+     */
     public function insert()
     {
         // TODO: Implement insert() method.
+        $sql = 'insert into ' . static::tableName();
+        $params = [];
+        $keys = [];
+        foreach($this as $key => $value) {
+            array_push($keys, $key);
+            array_push($params, $value);
+        }
+        // 构建?号语句
+        $holder = array_fill(0, count($keys), '?');
+        $sql .= '(' . implode(',', $keys) . ') values (' . implode(' , ', $holder) . ')';
+
+        $stmt = static::getDb()->prepare($sql);
+        $execRs = $stmt->execute($params);
+
+        // 返回一些自增赋回给Model中
+        $primaryKeys = static::primaryKey();
+        foreach($primaryKeys as $primaryKey) {
+            $lastId = static::getDb()->lastInsertId($primaryKey);
+            $this->$primaryKey = (int)$lastId;
+        }
+        return $execRs;
     }
 
+    /**
+     * 更新操作
+     */
     public function update()
     {
         // TODO: Implement update() method.
+        $primaryKeys = static::primaryKey();
+        $condition = [];
+        foreach($primaryKeys as $primaryKey) {
+            $condition[$primaryKey] = isset($this->$primaryKey)? $this->$primaryKey:null;
+        }
+        $attribute = [];
+        foreach($this as $key => $value) {
+            if(!in_array($key, $primaryKeys, true)) {
+                $attribute[$key] = $value;
+            }
+        }
+        return static::updateAll($attribute, $condition) !== false;
     }
 
+    /**
+     * 删除操作
+     */
     public function delete()
     {
         // TODO: Implement delete() method.
+        $primaryKeys = static::primaryKey();
+        $condition = [];
+        foreach($primaryKeys as $primaryKey) {
+            $condition[$primaryKey] = isset($this->$primaryKey)? $this->$primaryKey:null;
+        }
+        return static::deleteAll($condition) !== false;
+    }
+
+    /**
+     * 保存记录(添加或者更新)
+     */
+    public function save()
+    {
+        $primaryKeys = static::primaryKey();
+        $insertFlag = false;
+        foreach($primaryKeys as $primaryKey) {
+            if(!isset($this->$primaryKey)) {
+                $insertFlag = true;
+            }
+        }
+        // 插入
+        return $insertFlag? $this->insert():$this->update();
+    }
+
+    public function beginTransaction()
+    {
+        static::getDb()->beginTransaction();
+    }
+
+    public function commit()
+    {
+        static::getDb()->commit();
+    }
+
+    public function rollBack()
+    {
+        static::getDb()->rollBack();
     }
 }

@@ -6,7 +6,7 @@ namespace vendor;
  * Date: 2016/9/26 0026
  * Time: 下午 4:18
  */
-class donkey
+class Donkey
 {
     public static $classMap = array();
     static public function run()
@@ -40,5 +40,10 @@ class donkey
                 self::$classMap[$class] = $class;
             }
         }
+    }
+
+    static public function getDb()
+    {
+        return new \vendor\lib\model();
     }
 }

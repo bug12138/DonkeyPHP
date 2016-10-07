@@ -25,4 +25,6 @@ interface ModelInterface
     public function update();
 
     public function delete();
+
+    public function save();
 }
