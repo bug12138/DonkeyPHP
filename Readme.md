@@ -1,19 +1,25 @@
 # DonkeyPHP #
 
-> 初始版本 V1.0
+> 当前版本 V1.0.1
 
 
 ### 框架进度说明 ###
 
-1. 完成入口文件的开发
-2. 初步的mvc可以调用
-3. model层处于半开发状态，待修改
+
+> 接下来的要做的东西 
+
+1. 添加是视图模板 待确定是否用 twig/twig
+2. 添加缓存组件
+3. 添加restful api支持
+4. 添加基本逻辑代码生成
+5. 添加rabc功能开发
 
 
-### 2016/09/01 ###
+### 版本 V1.0.0 ###
 
-1. 添加composer支持
-2. 添加第三方库symfony/var-dumper,filp/whools
+1. 代码初步的mvc可以调用，model层处于半开发状态，待修改
+2. 添加composer支持
+3. 添加第三方库symfony/var-dumper,filp/whools
 
 ### 版本 V1.0.1 ###
 
@@ -56,14 +62,5 @@
 	donkey => Donkey
 	model  => Model
 	log    => Log
-
-### 接下来的要做的东西
-
-1. 添加是视图模板 待确定是否用 twig/twig
-2. 添加缓存组件
-3. 添加restful api支持
-4. 添加基本逻辑代码生成
-5. 添加rabc功能开发
-
 
 
